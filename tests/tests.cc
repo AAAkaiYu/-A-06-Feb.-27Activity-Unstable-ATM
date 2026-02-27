@@ -110,3 +110,10 @@ TEST_CASE("printing a ledger for an account that doesn't exist", "[ex-9]") {
   REQUIRE_THROWS_AS(atm.PrintLedger("test.txt", 99999999, 9999),
                     std::invalid_argument);
 }
+TEST_CASE("deposit appear as expected", "[ex-10]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 100.00);
+  atm.DepositCash(12345678, 1234, 100.00);
+  double balance = atm.CheckBalance(12345678, 1234);
+  REQUIRE(balance == 200.00);
+}
