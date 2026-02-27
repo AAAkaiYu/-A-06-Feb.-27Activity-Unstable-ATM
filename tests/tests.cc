@@ -74,3 +74,23 @@ TEST_CASE("Example: Print Prompt Ledger", "[ex-3]") {
   atm.PrintLedger("./prompt.txt", 12345678, 1234);
   REQUIRE(CompareFiles("./ex-1.txt", "./prompt.txt"));
 }
+TEST_CASE("not enough deposit", "[ex-4]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 100.00);
+  REQUIRE_THROWS_AS(atm.WithdrawCash(12345678, 1234, 12345690),
+                    std::runtime_error);
+  double balance = atm.CheckBalance(12345678, 1234);
+  REQUIRE(balance == 100.00);
+}
+TEST_CASE("withdraw negative", "[ex-5]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 100.00);
+  REQUIRE_THROWS_AS(atm.WithdrawCash(12345678, 1234, -50.0),
+                    std::invalid_argument);
+}
+TEST_CASE("deposit negative", "[ex-5]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 100.00);
+  REQUIRE_THROWS_AS(atm.DepositCash(12345678, 1234, -50.0),
+                    std::invalid_argument);
+}
