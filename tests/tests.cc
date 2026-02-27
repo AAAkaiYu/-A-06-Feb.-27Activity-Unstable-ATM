@@ -88,9 +88,25 @@ TEST_CASE("withdraw negative", "[ex-5]") {
   REQUIRE_THROWS_AS(atm.WithdrawCash(12345678, 1234, -50.0),
                     std::invalid_argument);
 }
-TEST_CASE("deposit negative", "[ex-5]") {
+TEST_CASE("deposit negative", "[ex-6]") {
   Atm atm;
   atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 100.00);
   REQUIRE_THROWS_AS(atm.DepositCash(12345678, 1234, -50.0),
+                    std::invalid_argument);
+}
+TEST_CASE("deposit for user do not exist", "[ex-7]") {
+  Atm atm;
+  REQUIRE_THROWS_AS(atm.DepositCash(12345678, 1234, -50.0),
+                    std::invalid_argument);
+}
+TEST_CASE("user already exist", "[ex-8]") {
+  Atm atm;
+  atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 100.00);
+  REQUIRE_THROWS_AS(atm.RegisterAccount(12345678, 1234, "another name", 100.00),
+                    std::invalid_argument);
+}
+TEST_CASE("printing a ledger for an account that doesn't exist", "[ex-9]") {
+  Atm atm;
+  REQUIRE_THROWS_AS(atm.PrintLedger("test.txt", 99999999, 9999),
                     std::invalid_argument);
 }
